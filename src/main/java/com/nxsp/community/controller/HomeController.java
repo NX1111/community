@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//Controller\Respository\Service\Component
+//注入Spring容器,1111
 @Controller
 public class HomeController {
 
