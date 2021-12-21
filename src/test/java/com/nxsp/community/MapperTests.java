@@ -1,8 +1,10 @@
 package com.nxsp.community;
 
 import com.nxsp.community.dao.DiscussPostMapper;
+import com.nxsp.community.dao.LoginTicketMapper;
 import com.nxsp.community.dao.UserMapper;
 import com.nxsp.community.entity.DiscussPost;
+import com.nxsp.community.entity.LoginTicket;
 import com.nxsp.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,9 @@ public class MapperTests {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
@@ -74,5 +79,32 @@ public class MapperTests {
         int rows = discussPostMapper.selectDiscussPostRows(149);
         System.out.println(rows);
     }
+
+    //测试LoginTicket,插入方法
+    @Test
+    public void testInsertTicket() {
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 *10));
+        loginTicket.setStatus(0);
+        loginTicket.setTicket("abc");
+        loginTicket.setUserId(101);
+        int i = loginTicketMapper.insertLoginTicket(loginTicket);
+        System.out.println(i);
+    }
+
+    @Test
+    public void testSelectTicket(){
+        LoginTicket abc = loginTicketMapper.selectByTicket("abc");
+        System.out.println(abc);
+
+    }
+
+    @Test
+    public void testSelectUpdate(){
+        loginTicketMapper.updateStatus("abc",1);
+        LoginTicket abc = loginTicketMapper.selectByTicket("abc");
+        System.out.println(abc);
+    }
+
 
 }
