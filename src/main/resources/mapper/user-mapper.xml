@@ -47,4 +47,8 @@
         update user set password = #{password} where id = #{id}
     </update>
 
+    <update id="updateSalt">
+        update user set salt = #{salt} where id = #{id}
+    </update>
+
 </mapper>

@@ -40,6 +40,9 @@ public class UserService {
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+    private int userId;
+    private String oldPassword;
+    private String newPassword;
 
     public User findUserById(int id) {
         return userMapper.selectById(id);
@@ -86,7 +89,7 @@ public class UserService {
         user.setType(0);
         user.setStatus(0);
         user.setActivationCode(CommunityUtil.generateUUID());
-        user.setHeaderUrl(String.format("http://image.nowcode.com/head/%dt.png",new Random().nextInt(1000)));
+        user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png",new Random().nextInt(1000)));
         user.setCreateTime(new Date());
         userMapper.insertUser(user);
         //激活邮件
@@ -186,8 +189,51 @@ public class UserService {
         loginTicketMapper.updateStatus(ticket, 1);
     }
 
+    public LoginTicket findLoginTicket(String ticket){
+        return loginTicketMapper.selectByTicket(ticket);
+    }
 
 
+    public int updateHeader(int userId , String url){
+        return userMapper.updateHeader(userId , url);
+    }
 
+    /**
+     * Description: 修改密码
+     *
+     * @param userId:
+     * @param oldPassword:
+     * @param newPassword:
+     * @return java.util.Map<java.lang.String, java.lang.Object>:
+     */
+    public Map<String, Object> updatePassword(int userId, String oldPassword, String newPassword) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        // 空值处理
+        if (StringUtils.isBlank(oldPassword)) {
+            map.put("oldPasswordMsg", "原密码不能为空!");
+            return map;
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            map.put("newPasswordMsg", "新密码不能为空!");
+            return map;
+        }
+
+        // 验证原始密码
+        User user = userMapper.selectById(userId);
+        oldPassword = CommunityUtil.md5(oldPassword + user.getSalt());
+        if (!user.getPassword().equals(oldPassword)) {
+            map.put("oldPasswordMsg", "原密码输入有误!");
+            return map;
+        }
+
+        // 更新salt
+        user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
+        userMapper.updateSalt(userId,user.getSalt());
+        //更新密码
+        userMapper.updatePassword(userId ,CommunityUtil.md5(newPassword + user.getSalt()));
+        return map;
+    }
 
 }
