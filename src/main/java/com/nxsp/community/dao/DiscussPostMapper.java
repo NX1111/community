@@ -21,6 +21,14 @@ public interface DiscussPostMapper {
 
     DiscussPost selectDiscussPostById(int id);
 
+
+
+    /**
+     * 更新回帖总数量
+     * @param id post_id 发布帖子的自身id
+     * @param commentCount 这个帖子的回帖总数量，包括回复
+     * @return
+     */
     int updateCommentCount(int id, int commentCount);
 
 

@@ -72,24 +72,27 @@ public class DiscussPostController implements CommunityConstant {
 
         // 评论: 给帖子的评论
         // 回复: 给评论的评论
-        // 评论列表
+        // 给帖子的评论列表
+        //post.getId()表示entity_id，这条评论所指向的帖子的id
         List<Comment> commentList = commentService.findCommentsByEntity(
                 ENTITY_TYPE_POST, post.getId(), page.getOffset(), page.getLimit());
+
         // 评论VO列表
+        //将查出来的Comment与对应的User信息一起封装到Map，再组装成为List
         List<Map<String, Object>> commentVoList = new ArrayList<>();
         if (commentList != null) {
             for (Comment comment : commentList) {
                 // 评论VO
                 Map<String, Object> commentVo = new HashMap<>();
-                // 评论
+                // 向Map里添加评论
                 commentVo.put("comment", comment);
-                // 作者
+                // 添加评论该帖子的作者
                 commentVo.put("user", userService.findUserById(comment.getUserId()));
-
-                // 回复列表
+                // 回复（不分页）
                 List<Comment> replyList = commentService.findCommentsByEntity(
                         ENTITY_TYPE_COMMENT, comment.getId(), 0, Integer.MAX_VALUE);
                 // 回复VO列表
+                // 将查出来的回复与对应的User信息一起封装到Map，再组装成为List、
                 List<Map<String, Object>> replyVoList = new ArrayList<>();
                 if (replyList != null) {
                     for (Comment reply : replyList) {
@@ -98,7 +101,7 @@ public class DiscussPostController implements CommunityConstant {
                         replyVo.put("reply", reply);
                         // 作者
                         replyVo.put("user", userService.findUserById(reply.getUserId()));
-                        // 回复目标
+                        // 被回复者目标
                         User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
                         replyVo.put("target", target);
 
@@ -114,9 +117,9 @@ public class DiscussPostController implements CommunityConstant {
                 commentVoList.add(commentVo);
             }
         }
-
+        //将数据存入request域并请求转发
         model.addAttribute("comments", commentVoList);
-
+        // 跳转到帖子详情页面
         return "/site/discuss-detail";
     }
 
