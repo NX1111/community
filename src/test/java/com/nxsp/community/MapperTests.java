@@ -2,9 +2,11 @@ package com.nxsp.community;
 
 import com.nxsp.community.dao.DiscussPostMapper;
 import com.nxsp.community.dao.LoginTicketMapper;
+import com.nxsp.community.dao.MessageMapper;
 import com.nxsp.community.dao.UserMapper;
 import com.nxsp.community.entity.DiscussPost;
 import com.nxsp.community.entity.LoginTicket;
+import com.nxsp.community.entity.Message;
 import com.nxsp.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +31,8 @@ public class MapperTests {
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
-
+    @Autowired
+    private MessageMapper messageMapper;
     @Test
     public void testSelectUser() {
         User user = userMapper.selectById(101);
@@ -106,5 +109,27 @@ public class MapperTests {
         System.out.println(abc);
     }
 
+    @Test
+    public void testSelectLetters() {
+        List<Message> list = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+
+        int count = messageMapper.selectConversationCount(111);
+        System.out.println(count);
+
+        list = messageMapper.selectLetters("111_112", 0, 10);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+
+        count = messageMapper.selectLetterCount("111_112");
+        System.out.println(count);
+
+        count = messageMapper.selectLetterUnreadCount(131, "111_131");
+        System.out.println(count);
+
+    }
 
 }
