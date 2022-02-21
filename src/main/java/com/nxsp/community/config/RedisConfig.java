@@ -13,7 +13,7 @@ public class RedisConfig  {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template .setConnectionFactory(factory);
+        template.setConnectionFactory(factory);
         //设置key的序列化方式
         template.setKeySerializer(RedisSerializer.string());
         //设置value
@@ -23,6 +23,7 @@ public class RedisConfig  {
         //设置hash的value的序列化方式
         template.setHashValueSerializer(RedisSerializer.json());
 
+        //参数生效
         template.afterPropertiesSet();
         return template;
     }
