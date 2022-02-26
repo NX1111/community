@@ -11,8 +11,8 @@ public class RedisKeyUtil {
     private static final String PREFIX_TICKET = "ticket";
     private static final String PREFIX_USER = "user";
 
-    // 某个实体的赞
-    // like:entity:entityType:entityId -> set(userId)
+    // 某个实体(帖子、评论和回复)的赞在Redis中的key
+    // like:entity:entityType:entityId -> 作为一个set的key，value为点赞者的id的集合
     public static String getEntityLikeKey(int entityType, int entityId) {
         return PREFIX_ENTITY_LIKE + SPLIT + entityType + SPLIT + entityId;
     }

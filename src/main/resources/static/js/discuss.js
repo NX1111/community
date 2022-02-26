@@ -1,7 +1,10 @@
-function like(btn, entityType, entityId, entityUserId) {
+function like(btn, entityType, entityId, entityUserId,postId) {
     $.post(
+        /*访问路径*/
         CONTEXT_PATH + "/like",
-        {"entityType":entityType,"entityId":entityId,"entityUserId":entityUserId},
+        /*传数据给服务器端*/
+        {"entityType":entityType,"entityId":entityId,"entityUserId":entityUserId,"postId":postId},
+        //成功后的回调函数
         function(data) {
             data = $.parseJSON(data);
             if(data.code == 0) {

@@ -21,6 +21,7 @@ public class LikeService {
      * @param userId:     点赞者id
      * @param entityType: 待点赞的实体类型
      * @param entityId:   待点赞的实体Id
+     * @patam entityUserId: 实体拥有者的id
      * @return void:
      */
     public void like(int userId, int entityType, int entityId, int entityUserId) {
