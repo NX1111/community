@@ -57,6 +57,18 @@ public class CommentController {
         }
         eventProducer.fireEvent(event);
 
+        if(comment.getEntityType() == ENTITY_TYPE_POST){
+
+            //评论帖子，更新ES服务器
+            event =new Event()
+                    .setTopic(TOPIC_PUBLISH)
+                    .setUserId(comment.getUserId())
+                    .setEntityType(ENTITY_TYPE_POST)
+                    .setEntityId(discussPostId);
+            eventProducer.fireEvent(event);
+        }
+
+
         return "redirect:/discuss/detail/" + discussPostId;
     }
 

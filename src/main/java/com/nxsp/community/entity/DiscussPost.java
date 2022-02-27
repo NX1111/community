@@ -1,16 +1,41 @@
 package com.nxsp.community.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.util.Date;
 
+@Document(indexName = "discusspost" , type = "_doc" ,shards = 6, replicas = 3)
 public class DiscussPost {
+   @Id
     private int id;
+
+   @Field(type = FieldType.Integer)
     private int userId;
+
+    // 待搜索的字段，分词器ik_max_word尽可能拆分成词，分词器ik_smart在搜索时拆出较少的词
+   @Field(type = FieldType.Text , analyzer = "ik_max_word" , searchAnalyzer = "ik_smart")
     private String title;
+
+    // 待搜索的字段，分词器ik_max_word尽可能拆分成词，分词器ik_smart在搜索时拆出较少的词
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String content;
+
+    @Field(type = FieldType.Integer)
     private int type;
+
+    @Field(type = FieldType.Integer)
     private int status;
+
+    @Field(type = FieldType.Date)
     private Date createTime;
+
+    @Field(type = FieldType.Integer)
     private int commentCount;
+
+    @Field(type = FieldType.Double)
     private double score;
 
     @Override

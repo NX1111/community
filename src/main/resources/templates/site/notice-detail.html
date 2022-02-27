@@ -74,7 +74,7 @@
 				<!-- 通知列表 -->
 				<ul class="list-unstyled mt-4">
 					<li class="media pb-3 pt-3 mb-2" th:each="map:${notices}">
-						<img alt="系统图标" class="mr-4 rounded-circle user-header" th:src="${map.fromUser.headerUrl}">
+						<img th:src="${map.fromUser.headerUrl}"  alt="系统图标" class="mr-4 rounded-circle user-header" >
 						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
 							<div class="toast-header">
 								<strong class="mr-auto" th:utext="${map.fromUser.username}">落基山脉下的闲人</strong>
