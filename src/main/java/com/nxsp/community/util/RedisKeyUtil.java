@@ -10,6 +10,9 @@ public class RedisKeyUtil {
     private static final String PREFIX_KAPTCHA = "kaptcha";
     private static final String PREFIX_TICKET = "ticket";
     private static final String PREFIX_USER = "user";
+    private static final String PREFIX_UV = "uv";
+    private static final String PREFIX_DAU = "dau";
+    private static final String PREFIX_POST = "post";
 
     // 某个实体(帖子、评论和回复)的赞在Redis中的key
     // like:entity:entityType:entityId -> 作为一个set的key，value为点赞者的id的集合
@@ -49,5 +52,32 @@ public class RedisKeyUtil {
     public static String getUserKey(int userId) {
         return PREFIX_USER + SPLIT + userId;
     }
+
+    //单日UV,一个日期为一个HyperLogLog
+    public static String getUVKey(String date){
+        return PREFIX_UV + SPLIT + date;
+    }
+
+    // 区间UV独立访客（对单日UV的合并，新增一个HyperLogLog），用于查询
+    public static String getUVKey(String startDate, String endDate) {
+        return PREFIX_UV + SPLIT + startDate + SPLIT + endDate;
+    }
+
+    // 单日DAU活跃用户（以userId作为索引存入Bitmap，一个日期为一个Bitmap），用于统计
+    public static String getDAUKey(String date) {
+        return PREFIX_DAU + SPLIT + date;
+    }
+
+    // 区间DAU活跃用户（对单日DAU的合并，或运算，新增一个Bitmap），用于查询
+    public static String getDAUKey(String startDate, String endDate) {
+        return PREFIX_DAU + SPLIT + startDate + SPLIT + endDate;
+    }
+
+    //帖子分数
+    public static String getPostScoreKey(){
+        return PREFIX_POST + SPLIT + "score";
+
+    }
+
 
 }

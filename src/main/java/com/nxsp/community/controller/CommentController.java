@@ -7,7 +7,9 @@ import com.nxsp.community.event.EventProducer;
 import com.nxsp.community.service.CommentService;
 import com.nxsp.community.service.DiscussPostService;
 import com.nxsp.community.util.HostHolder;
+import com.nxsp.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,9 @@ public class CommentController {
     @Autowired
     private DiscussPostService discussPostService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     @RequestMapping(path = "/add/{discussPostId}", method = RequestMethod.POST)
     public String addComment(@PathVariable("discussPostId") int discussPostId, Comment comment) {
@@ -57,6 +62,8 @@ public class CommentController {
         }
         eventProducer.fireEvent(event);
 
+
+
         if(comment.getEntityType() == ENTITY_TYPE_POST){
 
             //评论帖子，更新ES服务器
@@ -66,6 +73,9 @@ public class CommentController {
                     .setEntityType(ENTITY_TYPE_POST)
                     .setEntityId(discussPostId);
             eventProducer.fireEvent(event);
+            //计算帖子分数
+            String redisKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(redisKey,discussPostId);
         }
 
 

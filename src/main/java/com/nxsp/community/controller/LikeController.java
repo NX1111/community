@@ -6,15 +6,19 @@ import com.nxsp.community.event.EventProducer;
 import com.nxsp.community.service.LikeService;
 import com.nxsp.community.util.CommunityUtil;
 import com.nxsp.community.util.HostHolder;
+import com.nxsp.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.nxsp.community.util.CommunityConstant.ENTITY_TYPE_POST;
 import static com.nxsp.community.util.CommunityConstant.TOPIC_LIKE;
 
 @Controller
@@ -28,6 +32,9 @@ public class LikeController {
 
     @Autowired
     private EventProducer eventProducer;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(path = "/like", method = RequestMethod.POST)
     @ResponseBody
@@ -57,7 +64,11 @@ public class LikeController {
             eventProducer.fireEvent(event);
         }
 
-
+        if(entityType == ENTITY_TYPE_POST){
+            //计算帖子分数
+            String redisKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(redisKey,postId);
+        }
 
         return CommunityUtil.getJSONString(0, null, map);
     }
