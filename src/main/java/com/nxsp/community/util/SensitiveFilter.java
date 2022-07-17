@@ -87,7 +87,7 @@ public class SensitiveFilter {
         while (position < text.length()) {
             char c = text.charAt(position);
 
-            // 跳过符号
+            // 跳过符号，符号穿插在敏感词之间也会被判定是敏感词
             if (isSymbol(c)) {
                 // 若指针1处于根节点,将此符号计入结果,让指针2向下走一步
                 if (tempNode == rootNode) {

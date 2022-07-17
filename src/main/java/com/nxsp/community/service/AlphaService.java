@@ -83,7 +83,7 @@ public class AlphaService {
         return "ok";
     }
 
-    //
+
     public Object save2() {
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);

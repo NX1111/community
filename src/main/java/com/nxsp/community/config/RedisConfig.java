@@ -13,7 +13,9 @@ public class RedisConfig  {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+        //具备访问数据库的能力
         template.setConnectionFactory(factory);
+        //java数据类型存储到数据库中
         //设置key的序列化方式
         template.setKeySerializer(RedisSerializer.string());
         //设置value

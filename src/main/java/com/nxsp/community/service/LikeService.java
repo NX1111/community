@@ -33,9 +33,8 @@ public class LikeService {
                 String userLikeKey = RedisKeyUtil.getUserLikeKey(entityUserId);
                 // 判断Redis中是否有此用户对当前实体的点赞(集合set)
                 boolean isMember = operations.opsForSet().isMember(entityLikeKey, userId);
-
+                //开启事务
                 operations.multi();
-
                 if (isMember) {
                     // 有点赞，双击取消点赞
                     operations.opsForSet().remove(entityLikeKey, userId);
@@ -45,7 +44,7 @@ public class LikeService {
                     operations.opsForSet().add(entityLikeKey, userId);
                     operations.opsForValue().increment(userLikeKey);
                 }
-
+                //执行事务
                 return operations.exec();
             }
         });
