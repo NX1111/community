@@ -5,6 +5,7 @@ $(function(){
 function upload() {
     /*$.post()是对$.ajax()的简化*/
     $.ajax({
+        /*表单直接提交给七牛云，七牛云自动处理图片文件*/
         url: "http://upload-z2.qiniup.com",
         method: "post",
         /*不把表单数据转化为字符串*/
