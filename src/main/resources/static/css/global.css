@@ -21,7 +21,7 @@ body {
 }
 
 header .navbar-brand {
-	background: url(../img/nxsplogo2.png) no-repeat;
+	background: url('http://rfb06fnga.hn-bkt.clouddn.com/nxsplogo2.png') no-repeat;
 	background-size: 147px 42px;
 	width: 147px;
 	height: 42px;
